@@ -87,3 +87,4 @@ build {
   }
 }
 ```
+**Setting up EC2 instance from the latest AMI using Terraform**
