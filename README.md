@@ -88,3 +88,44 @@ build {
 }
 ```
 **Setting up EC2 instance from the latest AMI using Terraform**
+
+**Create a provider.tf file**
+```sh
+provider "aws" {
+  region     = var.region
+  
+}
+```
+**Datasource to fetch zone details and latest AMI**
+
+> fetching zone details
+``` 
+data "aws_route53_zone" "my_zone" {
+  name         = var.domain_name
+  private_zone = false
+}
+ ```
+ 
+> fetching the most recent ami id
+``` 
+data "aws_ami" "latest_ami" {
+  most_recent = true
+ 
+  filter {
+    name   = "name"
+    values = ["my-project-dev-*"]
+  }
+ 
+  filter {
+    name   = "tag:project"
+    values = ["my-project"]
+  }
+ 
+  filter {
+    name   = "tag:env"
+    values = ["dev"]
+  }
+ 
+  owners = ["self"]
+}
+```
