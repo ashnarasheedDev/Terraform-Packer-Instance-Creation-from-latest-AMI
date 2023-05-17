@@ -94,7 +94,7 @@ packer validate .
 ```
 #### Lets apply the above architecture to the AWS.
 ```sh
-packer apply
+packer apply .
 ```
 
 **Setting up EC2 instance from the latest AMI using Terraform**
@@ -194,4 +194,61 @@ resource "aws_instance" "webserver" {
     create_before_destroy = true
   }
 } 
+```
+> creating security group
+ 
+```
+resource "aws_security_group" "webserver" {
+  name_prefix = "${var.project_name}-${var.env}-"
+ 
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+ 
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+ 
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+ 
+  tags = {
+    Name = "${var.project_name}-${var.env}"
+  }
+ 
+}
+ ```
+ 
+> creating eip for instance
+
+``` 
+resource "aws_eip" "webserver" {
+  instance = aws_instance.webserver.id
+  vpc      = true
+}
+ ```
+ 
+> Pointing webserver.ashna.online to eip of instance
+ 
+```
+resource "aws_route53_record" "webserver" {
+  zone_id = data.aws_route53_zone.my_zone.id
+  name    = var.record_name
+  type    = "A"
+  ttl     = 300
+  records = [aws_eip.webserver.public_ip]
+}
 ```
