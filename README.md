@@ -86,7 +86,17 @@ build {
     execute_command = "sudo {{.Path}}"
   }
 }
+
 ```
+#### Lets validate the code using
+```sh
+packer validate .
+```
+#### Lets apply the above architecture to the AWS.
+```sh
+packer apply
+```
+
 **Setting up EC2 instance from the latest AMI using Terraform**
 
 **Create a provider.tf file**
@@ -94,6 +104,34 @@ build {
 provider "aws" {
   region     = var.region
   
+}
+```
+**Create a variable.tf file**
+
+```
+variable "env" {
+  default = "dev"
+}
+ 
+variable "project_name" {
+  default = "my-project"
+}
+ 
+variable "region" {
+  default = "ap-south-1"
+}
+ 
+ 
+variable "instance_type" {
+  default = "t2.micro"
+}
+ 
+variable "domain_name" {
+  default = "ashna.online"
+}
+ 
+variable "record_name" {
+  default = "webserver"
 }
 ```
 **Datasource to fetch zone details and latest AMI**
@@ -128,4 +166,32 @@ data "aws_ami" "latest_ami" {
  
   owners = ["self"]
 }
+```
+> loading keypair module
+
+``` 
+module "key" {
+ 
+  source     = "/home/ec2-user/key-module/"
+  my_project = var.project_name
+  my_env     = var.env
+  region     = var.region
+}
+```
+> creating an instance
+> The AMI ID for the instance is set to data.aws_ami.latest_ami.id. This refers to the most recent AMI ID fetched from the data source block named "latest_ami".
+ 
+```
+resource "aws_instance" "webserver" {
+  ami                    = data.aws_ami.latest_ami.id
+  instance_type          = var.instance_type
+  key_name               = module.key.key_name
+  vpc_security_group_ids = [aws_security_group.webserver.id]
+  tags = {
+    Name = "${var.project_name}-${var.env}"
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+} 
 ```
