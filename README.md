@@ -178,7 +178,8 @@ module "key" {
   region     = var.region
 }
 ```
-> creating an instance
+> Creating an instance
+
 > The AMI ID for the instance is set to data.aws_ami.latest_ami.id. This refers to the most recent AMI ID fetched from the data source block named "latest_ami".
  
 ```
@@ -252,3 +253,19 @@ resource "aws_route53_record" "webserver" {
   records = [aws_eip.webserver.public_ip]
 }
 ```
+#### Lets validate the terraform codes using
+```sh
+terraform validate
+```
+#### Lets plan the architecture and verify once again.
+```sh
+terraform plan
+```
+#### Lets apply the above architecture to the AWS.
+```sh
+terraform apply
+```
+
+----
+## Conclusion
+This Terraform configuration allows you to provision an EC2 instance from the latest AMI, create a security group, associate an Elastic IP, and configure a Route 53 DNS record for easy access to the instance.
