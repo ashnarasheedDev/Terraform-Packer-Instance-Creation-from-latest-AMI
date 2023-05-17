@@ -1,4 +1,4 @@
-## Decsription
+#### Decsription
 
 Packer is a tool that can build machine images for multiple platforms, including Amazon EC2. Here are the general steps to achieve this workflow:
 
@@ -48,7 +48,7 @@ locals {
   image_name      = "${var.project_name}-${var.env}-${local.image_timestamp}"
 }
 ```
-**Configuration for building an Amazon Machine Image (AMI) using Packer**
+#### Configuration for building an Amazon Machine Image (AMI) using Packer
  
  Source block specifies the source configuration for building an Amazon EBS-backed AMI. It has the following attributes:
     region: Specifies the region where the AMI will be built, using the value from the var.region variable.
@@ -97,7 +97,7 @@ packer validate .
 packer apply .
 ```
 
-**Setting up EC2 instance from the latest AMI using Terraform**
+#### Setting up EC2 instance from the latest AMI using Terraform
 
 **Create a provider.tf file**
 ```sh
