@@ -38,5 +38,12 @@ variable "instance_type" {
   default = "t2.micro"
 }
 ```
-
+**Locals Block**
+The locals block is used to define local values that can be reused within the Terraform configuration. The image_timestamp variable is assigned the formatted timestamp using the formatdate() function with the desired date and time format. The timestamp() function provides the current timestamp. The image_name variable is then formed by concatenating the values of var.project_name, var.env, and local.image_timestamp together using the string interpolation syntax ${..}hence gets uique image name.
+```
+locals {
+  image_timestamp = formatdate("DD-MM-YYYY-HH-MM", timestamp())
+  image_name      = "${var.project_name}-${var.env}-${local.image_timestamp}"
+}
+```
 
