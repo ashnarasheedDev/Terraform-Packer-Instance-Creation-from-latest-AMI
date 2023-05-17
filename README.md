@@ -39,11 +39,51 @@ variable "instance_type" {
 }
 ```
 **Locals Block**
+
 The locals block is used to define local values that can be reused within the Terraform configuration. The image_timestamp variable is assigned the formatted timestamp using the formatdate() function with the desired date and time format. The timestamp() function provides the current timestamp. The image_name variable is then formed by concatenating the values of var.project_name, var.env, and local.image_timestamp together using the string interpolation syntax ${..}hence gets uique image name.
+
 ```
 locals {
   image_timestamp = formatdate("DD-MM-YYYY-HH-MM", timestamp())
   image_name      = "${var.project_name}-${var.env}-${local.image_timestamp}"
 }
 ```
+**Configuration for building an Amazon Machine Image (AMI) using Packer**
+ 
+ Source block specifies the source configuration for building an Amazon EBS-backed AMI. It has the following attributes:
+    region: Specifies the region where the AMI will be built, using the value from the var.region variable.
+    source_ami: Specifies the base AMI ID to use as the source for the new AMI, using the value from the var.source_ami variable.
+    ami_name: Specifies the name of the resulting AMI. In this case, it uses the value from the local.image-name variable, which should be generated in a separate section of the configuration.
+    instance_type: Specifies the EC2 instance type to use for building the AMI, using the value from the var.instance_type variable.
+    ssh_username: Specifies the username used for SSH connections to the EC2 instances during the build process.
+    
+   ```
+   source "amazon-ebs" "zomato" {
+ 
+  region        = var.region
+  source_ami    = var.source_ami
+  ami_name      = local.image-name
+  instance_type = var.instance_type
+  ssh_username  = "ec2-user"
+ 
+  tags = {
+    Name    = local.image-name
+    project = var.project_name
+    env     = var.env
+ 
+  }
+}
+```
+Build block defines the build process for the AMI. It specifies the source as source.amazon-ebs.zomato, which refers to the source configuration defined in the previous block. The provisioner block within the build block specifies a shell script (userdata.sh) to be executed on the EC2 instance during the build process. The execute_command attribute provides the command to execute the script with elevated privileges using sudo {{.Path}}.
 
+```
+build {
+ 
+  sources = ["source.amazon-ebs.zomato"]
+  provisioner "shell" {
+ 
+    script          = "userdata.sh"
+    execute_command = "sudo {{.Path}}"
+  }
+}
+```
