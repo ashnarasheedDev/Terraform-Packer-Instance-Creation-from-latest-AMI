@@ -185,7 +185,8 @@ data "aws_ami" "latest_ami" {
   owners = ["self"]
 }
 ```
-> loading keypair module
+
+> <b>Loading keypair module</b>
 
 ``` 
 module "key" {
