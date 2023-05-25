@@ -1,6 +1,6 @@
 ### Decsription
 
-Packer is a tool that can build machine images for multiple platforms, including Amazon EC2. Here are the general steps to achieve this workflow:
+<b>Packer is a tool that can build machine images for multiple platforms, including Amazon EC2. Here are the general steps to achieve this workflow:</b>
 
 Create a Packer template (usually in JSON or HCL format) that defines the configuration for building the machine image. This includes specifying the source image, provisioners, and other settings. Within the Packer template, you can use provisioners like shell scripts or configuration management tools to customize the image.
 Use Packer to build the AMI based on the template. Packer will execute the defined provisioners and create the desired machine image in your AWS account.
