@@ -150,7 +150,9 @@ variable "record_name" {
 ```
 **Datasource to fetch zone details and latest AMI**
 
-> fetching zone details
+> <b>Fetching zone details</b>
+
+
 ``` 
 data "aws_route53_zone" "my_zone" {
   name         = var.domain_name
@@ -158,7 +160,9 @@ data "aws_route53_zone" "my_zone" {
 }
  ```
  
-> fetching the most recent ami id
+> <b>Fetching the most recent ami id</b>
+
+
 ``` 
 data "aws_ami" "latest_ami" {
   most_recent = true
