@@ -23,6 +23,10 @@ Later fetch zone details and add a route53 record to point the domain name to EI
 
 **Let's go through the code step by step**
 
+
+### 1. Setting Up Packer
+
+
 **Variable Declaration for packer**
 
 In this section, variables are declared with their default values. These variables allow you to customize and provide values when running Terraform commands. The variables defined here include env, project_name, region, source_ami, and instance_type
@@ -58,7 +62,7 @@ locals {
   image_name      = "${var.project_name}-${var.env}-${local.image_timestamp}"
 }
 ```
-#### Configuration for building an Amazon Machine Image (AMI) using Packer
+### 2. Configuration for building an Amazon Machine Image (AMI) using Packer
  
  Source block specifies the source configuration for building an Amazon EBS-backed AMI. It has the following attributes:
     region: Specifies the region where the AMI will be built, using the value from the var.region variable.
@@ -107,7 +111,7 @@ packer validate .
 packer apply .
 ```
 
-#### Setting up EC2 instance from the latest AMI using Terraform
+### 3. Setting up EC2 instance from the latest AMI using Terraform
 
 **Create a provider.tf file**
 ```sh
@@ -277,5 +281,6 @@ terraform apply
 ```
 
 ----
-## Conclusion
+### Conclusion
+
 This Terraform configuration allows you to provision an EC2 instance from the latest AMI, create a security group, associate an Elastic IP, and configure a Route 53 DNS record for easy access to the instance.
