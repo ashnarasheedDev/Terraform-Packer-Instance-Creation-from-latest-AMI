@@ -192,7 +192,7 @@ module "key" {
   region     = var.region
 }
 ```
-> Creating an instance
+> <b>Creating an instance</b>
 
 > The AMI ID for the instance is set to data.aws_ami.latest_ami.id. This refers to the most recent AMI ID fetched from the data source block named "latest_ami".
  
@@ -210,7 +210,7 @@ resource "aws_instance" "webserver" {
   }
 } 
 ```
-> creating security group
+> <b>Creating security group</b>
  
 ```
 resource "aws_security_group" "webserver" {
@@ -247,7 +247,7 @@ resource "aws_security_group" "webserver" {
 }
  ```
  
-> creating eip for instance
+> <b>Creating eip for instance</b>
 
 ``` 
 resource "aws_eip" "webserver" {
@@ -256,7 +256,7 @@ resource "aws_eip" "webserver" {
 }
  ```
  
-> Pointing webserver.ashna.online to eip of instance
+> <b>Pointing webserver.ashna.online to eip of instance</b>
  
 ```
 resource "aws_route53_record" "webserver" {
