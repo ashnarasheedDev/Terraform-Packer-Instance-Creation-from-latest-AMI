@@ -1,4 +1,4 @@
-#### Decsription
+### Decsription
 
 Packer is a tool that can build machine images for multiple platforms, including Amazon EC2. Here are the general steps to achieve this workflow:
 
@@ -10,6 +10,16 @@ Use Packer to build the AMI based on the template. Packer will execute the defin
 Write the Terraform configuration to provision and launch EC2 instances using the latest AMI created by Packer. This can be done by using the argument most_recent and by applying some filters.
 
 Later fetch zone details and add a route53 record to point the domain name to EIP of instance
+
+
+
+### Pre-requisites:
+
+1. IAM Role (Role needs to be attached on terraform running server)
+2. knowledge about AWS services and Packer
+3. Terraform and its installation.
+
+
 
 **Let's go through the code step by step**
 
